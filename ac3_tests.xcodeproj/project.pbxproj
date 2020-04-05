@@ -11,6 +11,9 @@
 		F5632F881CAB2178002027D9 /* silence.ac3 in Resources */ = {isa = PBXBuildFile; fileRef = F5632F871CAB2130002027D9 /* silence.ac3 */; };
 		F5632F8B1CADB60C002027D9 /* AERingBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5632F891CADAD0D002027D9 /* AERingBuffer.mm */; };
 		F5632F8E1CADEE8E002027D9 /* AudioConverterSink.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5632F8D1CADEE8E002027D9 /* AudioConverterSink.mm */; };
+		F5933EE62325238000FCBEEA /* AVSampleBufferAudioRendererSink.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5933EE42325238000FCBEEA /* AVSampleBufferAudioRendererSink.mm */; };
+		F5933EE82325806200FCBEEA /* file_example_MP3_5MG.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5933EE72325806200FCBEEA /* file_example_MP3_5MG.mp3 */; };
+		F5AB276521D3BE5300FC8641 /* out_2.ec3 in Resources */ = {isa = PBXBuildFile; fileRef = F5AB276421D3BE4600FC8641 /* out_2.ec3 */; };
 		F5E294471CA1F35400E1DF58 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E294461CA1F35400E1DF58 /* main.m */; };
 		F5E2944A1CA1F35400E1DF58 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E294491CA1F35400E1DF58 /* AppDelegate.m */; };
 		F5E2944D1CA1F35400E1DF58 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E2944C1CA1F35400E1DF58 /* ViewController.m */; };
@@ -30,6 +33,11 @@
 		F5632F8A1CADAFC8002027D9 /* AERingBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; path = AERingBuffer.h; sourceTree = "<group>"; };
 		F5632F8C1CADEE8E002027D9 /* AudioConverterSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioConverterSink.h; sourceTree = "<group>"; };
 		F5632F8D1CADEE8E002027D9 /* AudioConverterSink.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioConverterSink.mm; sourceTree = "<group>"; };
+		F5850EB923BD292000AC8FC8 /* ac3_tests.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ac3_tests.entitlements; sourceTree = "<group>"; };
+		F5933EE42325238000FCBEEA /* AVSampleBufferAudioRendererSink.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AVSampleBufferAudioRendererSink.mm; sourceTree = "<group>"; };
+		F5933EE52325238000FCBEEA /* AVSampleBufferAudioRendererSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVSampleBufferAudioRendererSink.h; sourceTree = "<group>"; };
+		F5933EE72325806200FCBEEA /* file_example_MP3_5MG.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = file_example_MP3_5MG.mp3; sourceTree = "<group>"; };
+		F5AB276421D3BE4600FC8641 /* out_2.ec3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = out_2.ec3; sourceTree = "<group>"; };
 		F5E294421CA1F35400E1DF58 /* ac3_tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ac3_tests.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5E294461CA1F35400E1DF58 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F5E294481CA1F35400E1DF58 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -76,6 +84,7 @@
 		F5E294441CA1F35400E1DF58 /* ac3_tests */ = {
 			isa = PBXGroup;
 			children = (
+				F5850EB923BD292000AC8FC8 /* ac3_tests.entitlements */,
 				F5632F8A1CADAFC8002027D9 /* AERingBuffer.h */,
 				F5632F891CADAD0D002027D9 /* AERingBuffer.mm */,
 				F5E294481CA1F35400E1DF58 /* AppDelegate.h */,
@@ -84,6 +93,8 @@
 				F5E2948B1CA23C8300E1DF58 /* AVPlayerSink.mm */,
 				F5632F8C1CADEE8E002027D9 /* AudioConverterSink.h */,
 				F5632F8D1CADEE8E002027D9 /* AudioConverterSink.mm */,
+				F5933EE52325238000FCBEEA /* AVSampleBufferAudioRendererSink.h */,
+				F5933EE42325238000FCBEEA /* AVSampleBufferAudioRendererSink.mm */,
 				F5632F841CAAFFCA002027D9 /* AudioController.h */,
 				F5632F851CAAFFCA002027D9 /* AudioController.m */,
 				F5E2944B1CA1F35400E1DF58 /* ViewController.h */,
@@ -94,7 +105,9 @@
 				F5E2944E1CA1F35400E1DF58 /* ac3_tests.xcdatamodeld */,
 				F5E2945C1CA1F47000E1DF58 /* sample1-5.1.ac3 */,
 				F5E2945D1CA1F48000E1DF58 /* sample1-5.1.eac3 */,
+				F5AB276421D3BE4600FC8641 /* out_2.ec3 */,
 				F5632F871CAB2130002027D9 /* silence.ac3 */,
+				F5933EE72325806200FCBEEA /* file_example_MP3_5MG.mp3 */,
 				F5E294451CA1F35400E1DF58 /* Supporting Files */,
 			);
 			path = ac3_tests;
@@ -139,6 +152,8 @@
 				TargetAttributes = {
 					F5E294411CA1F35400E1DF58 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 8U6WVDN2Q6;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -147,6 +162,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -165,6 +181,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5933EE82325806200FCBEEA /* file_example_MP3_5MG.mp3 in Resources */,
+				F5AB276521D3BE5300FC8641 /* out_2.ec3 in Resources */,
 				F5632F881CAB2178002027D9 /* silence.ac3 in Resources */,
 				F5E2945E1CA1F49300E1DF58 /* sample1-5.1.ac3 in Resources */,
 				F5E2945F1CA1F49300E1DF58 /* sample1-5.1.eac3 in Resources */,
@@ -187,6 +205,7 @@
 				F5632F8E1CADEE8E002027D9 /* AudioConverterSink.mm in Sources */,
 				F5E294471CA1F35400E1DF58 /* main.m in Sources */,
 				F5E294501CA1F35400E1DF58 /* ac3_tests.xcdatamodeld in Sources */,
+				F5933EE62325238000FCBEEA /* AVSampleBufferAudioRendererSink.mm in Sources */,
 				F5E2948C1CA23C8300E1DF58 /* AVPlayerSink.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -292,11 +311,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = ac3_tests/ac3_tests.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8U6WVDN2Q6;
 				INFOPLIST_FILE = ac3_tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mrmc.ac3-tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mrmc.audio-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TVOS_DEPLOYMENT_TARGET = 9.1;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
 			name = Debug;
 		};
@@ -305,11 +329,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = ac3_tests/ac3_tests.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8U6WVDN2Q6;
 				INFOPLIST_FILE = ac3_tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mrmc.ac3-tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mrmc.audio-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TVOS_DEPLOYMENT_TARGET = 9.1;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
 			name = Release;
 		};

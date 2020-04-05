@@ -235,7 +235,7 @@ static OSStatus converterCallback(AudioConverterRef inAudioConverter,
 	input_ctx.buffersize = input_ctx.framesize * 8;
 	input_ctx.buffer = (char*)malloc(input_ctx.buffersize);
 	input_ctx.stream_format = _m_inputFormat;
-  input_ctx.packet_desciption = (AudioStreamPacketDescription*)malloc(input_ctx.packets);
+  input_ctx.packet_desciption = (AudioStreamPacketDescription*)malloc(sizeof(AudioStreamPacketDescription));
   //
   NSString * testPath = [[NSBundle mainBundle] pathForResource: filename ofType: extension];
   FILE *fp = fopen(testPath.UTF8String, "rb");

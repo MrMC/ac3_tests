@@ -9,7 +9,45 @@
 #import "AppDelegate.h"
 #import "AVPlayerSink.h"
 #import "AudioConverterSink.h"
+#import "AudioConverterSink.h"
+#import "AVSampleBufferAudioRendererSink.h"
 #import <AVFoundation/AVFoundation.h>
+
+void DumpAudioDescriptions(const char *why)
+{
+  if (strlen(why) > 0)
+    NSLog(@"DumpAudioDescriptions: %s", why);
+
+  AVAudioSession *myAudioSession = [AVAudioSession sharedInstance];
+
+  NSArray *currentInputs = myAudioSession.currentRoute.inputs;
+  unsigned long count_in = [currentInputs count];
+  NSLog(@"DumpAudioDescriptions: input count = %lu", count_in);
+  for (int k = 0; k < count_in; ++k)
+  {
+    AVAudioSessionPortDescription *portDesc = [currentInputs objectAtIndex:k];
+    NSLog(@"DumpAudioDescriptions: portName, %s", [portDesc.portName UTF8String]);
+    for (AVAudioSessionChannelDescription *channel in portDesc.channels)
+    {
+      NSLog(@"DumpAudioDescriptions: channelLabel, %d", channel.channelLabel);
+      NSLog(@"DumpAudioDescriptions: channelName , %s", [channel.channelName UTF8String]);
+    }
+  }
+
+  NSArray *currentOutputs = myAudioSession.currentRoute.outputs;
+  unsigned long  count_out = [currentOutputs count];
+  NSLog(@"DumpAudioDescriptions: output count = %lu", count_out);
+  for (int k = 0; k < count_out; ++k)
+  {
+    AVAudioSessionPortDescription *portDesc = [currentOutputs objectAtIndex:k];
+    NSLog(@"DumpAudioDescriptions : portName, %s", [portDesc.portName UTF8String]);
+    for (AVAudioSessionChannelDescription *channel in portDesc.channels)
+    {
+      NSLog(@"DumpAudioDescriptions: channelLabel, %d", channel.channelLabel);
+      NSLog(@"DumpAudioDescriptions: channelName , %s", [channel.channelName UTF8String]);
+    }
+  }
+}
 
 @interface AppDelegate ()
 
@@ -20,22 +58,36 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   // Override point for customization after application launch.
+  [self registerAudioRouteNotifications];
 
   NSError *err = NULL;
-  if (![[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&err])
-  {
-    NSLog(@"AVAudioSession setCategory failed: %ld", (long)err.code);
-  }
+  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback mode:AVAudioSessionModeDefault routeSharingPolicy:AVAudioSessionRouteSharingPolicyLongFormAudio options:0 error:nil];
+
+  //if (![[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&err])
+  //{
+  //  NSLog(@"AVAudioSession setCategory failed: %ld", (long)err.code);
+  //}
   err = nil;
   if (![[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMoviePlayback error:&err])
   {
     NSLog(@"AVAudioSession setMode failed: %ld", (long)err.code);
   }
   err = nil;
+
+  // need to fetch maximumOutputNumberOfChannels when active
+  long channels = [[AVAudioSession sharedInstance] maximumOutputNumberOfChannels];
+  channels = 8;
+  [[AVAudioSession sharedInstance] setPreferredOutputNumberOfChannels: channels error: &err];
+
   if (![[AVAudioSession sharedInstance] setActive: YES error: &err])
   {
     NSLog(@"AVAudioSession setActive YES failed: %ld", (long)err.code);
   }
+
+  // check that we got the number of channels what we asked for
+  if (channels != [[AVAudioSession sharedInstance] outputNumberOfChannels])
+    NSLog(@"number of channels do not match: asked %ld, is %ld", channels, (long)[[AVAudioSession sharedInstance] outputNumberOfChannels]);
+
   return YES;
 }
 
@@ -54,6 +106,7 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+  [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
   // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
   [NSThread detachNewThreadSelector:@selector(enterForegroundDelayed:) toTarget:self withObject:nil];
 }
@@ -67,7 +120,8 @@
 - (void)enterForegroundDelayed:(id)arg
 {
   //AVPlayerSink *mSink = [AVPlayerSink alloc];
-  AudioConverterSink *mSink = [AudioConverterSink alloc];
+  //AudioConverterSink *mSink = [AudioConverterSink alloc];
+  AVSampleBufferAudioRendererSink *mSink = [AVSampleBufferAudioRendererSink alloc];
   [mSink startPlayback];
 }
 
@@ -149,6 +203,98 @@
             abort();
         }
     }
+}
+
+- (void)registerAudioRouteNotifications
+{
+  NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+  //register to audio route notifications
+  [nc addObserver:self selector:@selector(handleAudioRouteChange:) name:AVAudioSessionRouteChangeNotification object:nil];
+  [nc addObserver:self selector:@selector(handleAudioInterrupted:) name:AVAudioSessionInterruptionNotification object:nil];
+}
+
+- (void)unregisterAudioRouteNotifications
+{
+  NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+  //unregister faudio route notifications
+  [nc removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+  [nc removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
+}
+
+- (void)handleAudioRouteChange:(NSNotification *)notification
+{
+  // Your tests on the Audio Output changes will go here
+  NSInteger routeChangeReason = [notification.userInfo[AVAudioSessionRouteChangeReasonKey] integerValue];
+  switch (routeChangeReason)
+  {
+    case AVAudioSessionRouteChangeReasonUnknown:
+        NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonUnknown");
+        break;
+    case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
+        // an audio device was added
+        NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonNewDeviceAvailable");
+        DumpAudioDescriptions("AVAudioSessionRouteChangeReasonNewDeviceAvailable");
+        break;
+    case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
+        // a audio device was removed
+        NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
+        DumpAudioDescriptions("AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
+        break;
+    case AVAudioSessionRouteChangeReasonCategoryChange:
+        // called at start - also when other audio wants to play
+        NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonCategoryChange");
+        DumpAudioDescriptions("AVAudioSessionRouteChangeReasonCategoryChange");
+        break;
+    case AVAudioSessionRouteChangeReasonOverride:
+        NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonOverride");
+        break;
+    case AVAudioSessionRouteChangeReasonWakeFromSleep:
+        NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonWakeFromSleep");
+        break;
+    case AVAudioSessionRouteChangeReasonNoSuitableRouteForCategory:
+        NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonNoSuitableRouteForCategory");
+        break;
+    case AVAudioSessionRouteChangeReasonRouteConfigurationChange:
+        NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonRouteConfigurationChange");
+        DumpAudioDescriptions("AVAudioSessionRouteChangeReasonRouteConfigurationChange");
+        break;
+    default:
+        NSLog(@"routeChangeReason : unknown notification %ld", (long)routeChangeReason);
+        break;
+  }
+}
+- (void)handleAudioInterrupted:(NSNotification *)notification
+{
+  NSNumber *interruptionType = notification.userInfo[AVAudioSessionInterruptionTypeKey];
+  switch (interruptionType.integerValue)
+  {
+    case AVAudioSessionInterruptionTypeBegan:
+      // • Audio has stopped, already inactive
+      // • Change state of UI, etc., to reflect non-playing state
+      NSLog(@"audioInterrupted : AVAudioSessionInterruptionTypeBegan");
+      // pausedForAudioSessionInterruption = YES;
+      break;
+    case AVAudioSessionInterruptionTypeEnded:
+      {
+        // • Make session active
+        // • Update user interface
+        NSNumber *interruptionOption = notification.userInfo[AVAudioSessionInterruptionOptionKey];
+        BOOL shouldResume = interruptionOption.integerValue == AVAudioSessionInterruptionOptionShouldResume;
+        if (shouldResume == YES)
+        {
+          // if shouldResume you should continue playback.
+          NSLog(@"audioInterrupted : AVAudioSessionInterruptionTypeEnded: resume=yes");
+        }
+        else
+        {
+          NSLog(@"audioInterrupted : AVAudioSessionInterruptionTypeEnded: resume=no");
+        }
+        // pausedForAudioSessionInterruption = NO;
+      }
+      break;
+    default:
+      break;
+  }
 }
 
 @end
